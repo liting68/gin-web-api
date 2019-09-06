@@ -14,7 +14,7 @@ import (
 var G *gorm.DB
 
 func init() {
-	G = getDb("mytest")
+	G = getDb("mytest")//mytest 数据库名
 }
 
 func getDb(dbname string) *gorm.DB {
