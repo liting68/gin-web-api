@@ -12,7 +12,7 @@ import (
 //Config 配置结构
 type Config struct {
 	Middleware struct {
-		Secret string `yaml:secret`
+		Secret string `yaml:"secret"`
 	}
 	Db struct {
 		Mysql struct {

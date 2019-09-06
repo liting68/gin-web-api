@@ -10,6 +10,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
+//G 全局操作实体
 var G *gorm.DB
 
 func init() {
