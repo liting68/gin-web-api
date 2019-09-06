@@ -29,8 +29,8 @@ var Info Config
 
 func init() {
 	dir, _ := os.Getwd()
-	if strings.Contains(dir, "app\\test") {
-		dir = strings.Replace(dir, "app\\test", "app\\", 1)
+	if strings.Contains(dir, "test") {
+		dir = strings.Replace(dir, "test", "", 1)
 	}
 	configFile, err := ioutil.ReadFile(dir + "/config/config.yaml")
 	if err != nil {
