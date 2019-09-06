@@ -17,10 +17,10 @@ func TestIndexGetRouter(t *testing.T) {
 }
 
 func TestLogin(t *testing.T) {
-	arr := map[string]string{"username": "Lucus"}
+	arr := map[string]string{"username": "admin", "password": "admin"}
 	res := runTestPOST("/login", t, arr)
 	// assert.Equal(t, `{"code":0,"data":{"id":1,"username":"Lucus","password":"123456","created":"2019-09-03 15:24:39"}}`, res)
-	assert.NotNil(t,"",res)
+	assert.NotNil(t, "", res)
 }
 
 func runTestGET(reqURL string, t *testing.T) string {
