@@ -21,6 +21,6 @@ func SetupRouter() *gin.Engine {
 func RegisterRouter(router *gin.Engine) {
 	router.GET("/", action.Index)
 	router.POST("/login", action.Login)
-	router.POST("/updateManagerPass", action.UpdateManagerPass)
-	router.POST("/addManagerAccount", middleware.Auth(), action.AddManagerAccount)
+	router.POST("/updateManagerPass", middleware.Auth(), action.UpdateManagerPass)
+	router.POST("/addManagerAccount", action.AddManagerAccount)
 }

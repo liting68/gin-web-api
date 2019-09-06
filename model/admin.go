@@ -34,7 +34,7 @@ func (admin Admin) FirstByUsername(username string) Admin {
 }
 
 //FirstByID 根据用户ID查找记录
-func (admin Admin) FirstByID(id int64) Admin {
+func (admin Admin) FirstByID(id int) Admin {
 	db.EPR.First(&admin, id)
 	return admin
 }

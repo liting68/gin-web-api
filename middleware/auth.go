@@ -4,7 +4,6 @@ import (
 	"app/config"
 	"app/model"
 	"app/result"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -53,11 +52,8 @@ func Auth() gin.HandlerFunc {
 			context.Abort()
 			context.JSON(http.StatusUnauthorized, gin.H{"code": result.AuthErr, "errMsg": "token 过期"})
 		}
-		fmt.Printf("%#v\n", claims)
 		LoginID, _ := strconv.Atoi(claims.Id)
-		fmt.Printf("%#v\n", LoginID)
-		LoginAdmin = LoginAdmin.FirstByID(int64(LoginID))
-		fmt.Printf("%#v\n", LoginAdmin)
+		LoginAdmin = LoginAdmin.FirstByID(LoginID)
 		if LoginAdmin.ID == 0 {
 			context.Abort()
 			context.JSON(http.StatusUnauthorized, gin.H{"code": result.AuthErr, "errMsg": "用户不合法"})
