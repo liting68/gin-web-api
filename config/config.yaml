@@ -1,0 +1,8 @@
+middleware:
+  secret : epr_hiwein
+db:
+  mysql:
+    user : root
+    pass : root
+    host : 127.0.0.1
+    port : 3306
