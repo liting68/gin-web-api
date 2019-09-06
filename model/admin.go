@@ -16,9 +16,9 @@ type Admin struct {
 
 //自动建表
 func init() {
-	table := db.EPR.HasTable(Admin{})
+	table := db.G.HasTable(Admin{})
 	if !table {
-		db.EPR.CreateTable(Admin{})
+		db.G.CreateTable(Admin{})
 	}
 }
 
@@ -29,24 +29,24 @@ func (admin Admin) TableName() string {
 
 //FirstByUsername 根据用户名查找
 func (admin Admin) FirstByUsername(username string) Admin {
-	db.EPR.First(&admin, "username = ?", username)
+	db.G.First(&admin, "username = ?", username)
 	return admin
 }
 
 //FirstByID 根据用户ID查找记录
 func (admin Admin) FirstByID(id int) Admin {
-	db.EPR.First(&admin, id)
+	db.G.First(&admin, id)
 	return admin
 }
 
 //Create 新增Admin
 func (admin *Admin) Create() int {
-	db.EPR.Create(&admin)
+	db.G.Create(&admin)
 	return admin.ID
 }
 
 //UpdatePass 更新密码
 func (admin *Admin) UpdatePass(pass string) {
 	admin.Password = pass
-	db.EPR.Save(&admin)
+	db.G.Save(&admin)
 }

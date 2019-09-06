@@ -9,5 +9,5 @@ import (
 func main() {
 	gin.SetMode(gin.DebugMode)
 	router := router.SetupRouter()
-	router.Run("epr.lucus.com:80")
+	router.Run("localhost:80")
 }

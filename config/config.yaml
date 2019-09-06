@@ -1,5 +1,5 @@
 middleware:
-  secret : epr_hiwein
+  secret : gin-web-api-secret
 db:
   mysql:
     user : root

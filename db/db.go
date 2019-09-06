@@ -10,15 +10,10 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-//EPR 电子病历库
-var EPR *gorm.DB
-
-//PATDOC 医患平台库
-var PATDOC *gorm.DB
+var G *gorm.DB
 
 func init() {
-	EPR = getDb("patient_record")
-	PATDOC = getDb("doctor_patient")
+	G = getDb("mytest")
 }
 
 func getDb(dbname string) *gorm.DB {
