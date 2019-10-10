@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -14,12 +13,13 @@ type Config struct {
 	Middleware struct {
 		Secret string `yaml:"secret"`
 	}
-	Db struct {
+	DB struct {
 		Mysql struct {
-			User string `yaml:"user"`
-			Pass string `yaml:"pass"`
-			Host string `yaml:"host"`
-			Port string `yaml:"port"`
+			User   string `yaml:"user"`
+			Pass   string `yaml:"pass"`
+			Host   string `yaml:"host"`
+			Port   string `yaml:"port"`
+			DBName string `yaml:"dbname"`
 		}
 	}
 }
@@ -29,9 +29,6 @@ var Info Config
 
 func init() {
 	dir, _ := os.Getwd()
-	if strings.Contains(dir, "test") {
-		dir = strings.Replace(dir, "test", "", 1)
-	}
 	configFile, err := ioutil.ReadFile(dir + "/config/config.yaml")
 	if err != nil {
 		log.Panicln("err:", err.Error())

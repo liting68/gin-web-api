@@ -10,17 +10,30 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-//G 全局操作实体
-var G *gorm.DB
+//EPR 电子病历库
+var EPR *gorm.DB
+
+//PATDOC 医患平台库
+var PATDOC *gorm.DB
 
 func init() {
-	G = getDb("mytest")//mytest 数据库名
+	conf := config.Info
+	EPR = getDb(conf)
+	// conf.DB.Mysql.DBName="doctor_patient"
+	// PATDOC = getDb(conf)
 }
 
-func getDb(dbname string) *gorm.DB {
+//CloseDB 关闭连接释放连接池
+func CloseDB() {
+	EPR.Close()
+	// db.PATDOC.Close()
+}
+
+func getDb(conf config.Config) *gorm.DB {
 	var db *gorm.DB
 	var err error
-	user, pass, host, port := config.Info.Db.Mysql.User, config.Info.Db.Mysql.Pass, config.Info.Db.Mysql.Host, config.Info.Db.Mysql.Port
+	mysql := conf.DB.Mysql
+	user, pass, host, port, dbname := mysql.User, mysql.Pass, mysql.Host, mysql.Port, mysql.DBName
 	db, err = gorm.Open("mysql", user+":"+pass+"@tcp("+host+":"+port+")/"+dbname+"?loc=Asia%2FShanghai&parseTime=true")
 	if err != nil {
 		log.Panicln("err:", err.Error())
@@ -29,6 +42,6 @@ func getDb(dbname string) *gorm.DB {
 	db.LogMode(true)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
-	db.DB().SetConnMaxLifetime(15 * time.Minute)
+	db.DB().SetConnMaxLifetime(30 * time.Minute)
 	return db
 }

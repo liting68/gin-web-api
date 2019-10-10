@@ -3,6 +3,7 @@ package router
 import (
 	"app/action"
 	"app/middleware"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,8 +20,11 @@ func SetupRouter() *gin.Engine {
 
 //RegisterRouter 注册路由
 func RegisterRouter(router *gin.Engine) {
-	router.GET("/", action.Index)
-	router.POST("/login", action.Login)
-	router.POST("/updateManagerPass", middleware.Auth(), action.UpdateManagerPass)
-	router.POST("/addManagerAccount", action.AddManagerAccount)
+	basedir, _ := os.Getwd()
+	router.Static("/web", basedir+"/web")
+
+	home := action.HomeAction{}
+	router.POST("/login", home.Login)
+	router.GET("/init", middleware.Auth(), home.InitInfo)
+
 }
