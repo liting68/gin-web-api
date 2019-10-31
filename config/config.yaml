@@ -1,9 +1,12 @@
 middleware:
-  secret : longhua_hiwein
+  secret : gin-web-lucus
 db:
   mysql:
     user : root
     pass : root
     host : 127.0.0.1
     port : 3306
-    dbname : longhua_docpat
+    dbname : test
+  redis:
+    host : 127.0.0.1
+    port : 6379

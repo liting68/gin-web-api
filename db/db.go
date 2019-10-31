@@ -5,28 +5,28 @@ import (
 	"log"
 	"time"
 
+	"github.com/go-redis/redis/v7"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-//EPR 电子病历库
-var EPR *gorm.DB
+//DB 数据库实体
+var DB *gorm.DB
 
-//PATDOC 医患平台库
-var PATDOC *gorm.DB
+//Redis 缓存DB
+var Redis *redis.Client
 
 func init() {
-	conf := config.Info
-	EPR = getDb(conf)
-	// conf.DB.Mysql.DBName="doctor_patient"
-	// PATDOC = getDb(conf)
+	DB = getDb(config.Info)
+	Redis = redis.NewClient(&redis.Options{
+		Addr: config.Info.DB.Redis.Host + ":" + config.Info.DB.Redis.Port,
+	})
 }
 
 //CloseDB 关闭连接释放连接池
 func CloseDB() {
-	EPR.Close()
-	// db.PATDOC.Close()
+	DB.Close()
 }
 
 func getDb(conf config.Config) *gorm.DB {

@@ -2,30 +2,20 @@ package main
 
 import (
 	"app/db"
-	"app/router"
+	"app/lib"
+	"log"
+	"syscall"
 
-	"github.com/gin-gonic/gin"
+	"github.com/fvbock/endless"
 )
 
 func main() {
-	gin.SetMode(gin.DebugMode)
-	router := router.SetupRouter()
-	// router.Use(Cors())
-
-	router.Run("127.0.0.1:8081")
+	lib.StartCron() //定时任务
+	router := lib.InitGin()
+	server := endless.NewServer("127.0.0.1:8081", router) // router.Run("127.0.0.1:8081")
+	server.BeforeBegin = func(add string) {
+		log.Printf("Actual pid is %d", syscall.Getpid())
+	}
+	server.ListenAndServe()
 	defer db.CloseDB()
 }
-
-// func Cors() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		method := c.Request.Method
-// 		c.Header("Access-Control-Allow-Origin", "*")
-// 		c.Header("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken,X-Requested-With,accept,client-security-token")
-// 		c.Header("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE,PATCH")
-// 		c.Header("Access-Control-Allow-Credentials", "true")
-// 		if method == "OPTIONS" {
-// 			c.JSON(http.StatusOK, "")
-// 		}
-// 		c.Next()
-// 	}
-// }
