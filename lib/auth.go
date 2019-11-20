@@ -11,7 +11,6 @@ import (
 	"app/bearer"
 	"app/resp"
 	"errors"
-	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -50,7 +49,6 @@ func VerifyToken(context *gin.Context, sub string) (*jwt.StandardClaims, error) 
 	if len(headAuth) == 0 {
 		return nil, errors.New("需要 token")
 	}
-	headAuth = strings.Fields(headAuth)[1]
 	claim, err := bearer.ParseToken(headAuth)
 	if err != nil {
 		return nil, err

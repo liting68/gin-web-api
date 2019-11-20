@@ -4,6 +4,7 @@ import (
 	"app/config"
 	"errors"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -45,6 +46,12 @@ func CreateJWT(user LoginUser) (string, error) {
 
 //ParseToken 解析token
 func ParseToken(headAuth string) (*jwt.StandardClaims, error) {
+	arr := strings.Fields(headAuth)
+	if len(arr) > 1 {
+		headAuth = arr[1]
+	} else {
+		headAuth = arr[0]
+	}
 	jwtToken, err := jwt.ParseWithClaims(headAuth, &jwt.StandardClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return []byte(config.Info.Middleware.Secret), nil
 	})
