@@ -24,6 +24,7 @@ type Config struct {
 			Host   string `yaml:"host"`
 			Port   string `yaml:"port"`
 			DBName string `yaml:"dbname"`
+			Debug  bool   `yaml:"debug"`
 		}
 		Redis struct {
 			Host string `yaml:"host"`

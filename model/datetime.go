@@ -36,17 +36,19 @@ func (d *Datetime) UnmarshalJSON(b []byte) (err error) {
 		panic(err)
 	}
 	sv := string(b)
-	if len(sv) == 10 {
+	if len(sv) == 0 {
+		return nil
+	} else if len(sv) == 10 {
 		sv += " 00:00:00"
 	} else if len(sv) == 16 {
 		sv += ":00"
 	}
-	d.Time, err = time.ParseInLocation(CtLayout, string(b), loc)
+	d.Time, err = time.ParseInLocation(CtLayout, string(sv), loc)
 	if err != nil {
-		d.Time, err = time.ParseInLocation(CtLayoutNoeven, string(b), loc)
+		d.Time, err = time.ParseInLocation(CtLayoutNoeven, string(sv), loc)
 		if err != nil {
-			if d.Time, err = time.ParseInLocation(CtLayoutNosec, string(b), loc); err != nil {
-				d.Time, err = time.ParseInLocation(CtLayoutDate, string(b), loc)
+			if d.Time, err = time.ParseInLocation(CtLayoutNosec, string(sv), loc); err != nil {
+				d.Time, err = time.ParseInLocation(CtLayoutDate, string(sv), loc)
 			}
 		}
 	}

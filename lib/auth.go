@@ -44,12 +44,12 @@ func UserAuth() gin.HandlerFunc {
 }
 
 //VerifyToken 验证token
-func VerifyToken(context *gin.Context, sub string) (*jwt.StandardClaims, error) {
+func VerifyToken(context *gin.Context, sub string) (claim *jwt.StandardClaims, err error) {
 	headAuth := context.Request.Header.Get("Authorization")
 	if len(headAuth) == 0 {
 		return nil, errors.New("需要 token")
 	}
-	claim, err := bearer.ParseToken(headAuth)
+	claim, err = bearer.ParseToken(headAuth)
 	if err != nil {
 		return nil, err
 	}

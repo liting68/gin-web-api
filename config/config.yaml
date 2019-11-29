@@ -1,3 +1,6 @@
+app:
+  host : 
+  debug : true
 middleware:
   secret : gin-web-lucus
 db:
@@ -7,6 +10,7 @@ db:
     host : 127.0.0.1
     port : 3306
     dbname : test
+    debug : true
   redis:
     host : 127.0.0.1
     port : 6379

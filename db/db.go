@@ -39,7 +39,7 @@ func getDb(conf config.Config) *gorm.DB {
 		log.Panicln("err:", err.Error())
 	}
 	db.SingularTable(true)
-	db.LogMode(true)
+	db.LogMode(conf.DB.Mysql.Debug)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 	db.DB().SetConnMaxLifetime(30 * time.Minute)
