@@ -4,26 +4,6 @@ golang gin web api framework 基于Gin开发的api框架，开箱即用
 ## 配置文件
 ```text
 \config\config.yaml
-app:
-  host : 
-  debug : true
-middleware:
-  secret : gin-web-lucus
-db:
-  mysql:
-    user : root
-    pass : root
-    host : 127.0.0.1
-    port : 3306
-    dbname : test
-    debug : true
-  redis:
-    host : 127.0.0.1
-    port : 6379
-wechat :
-  user :
-    appid :
-    app-secret :
 ```
 ## 目录说明
 ```text
