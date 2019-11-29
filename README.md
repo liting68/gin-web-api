@@ -8,7 +8,7 @@ golang gin web api framework 基于Gin开发的api框架，开箱即用
 ## 目录说明
 ```text
 \config
-    └  config.go 配置结构
+    └ config.go 配置结构
     └ config.yaml 配置信息
 \controller
     └ home.go 首页控制器
