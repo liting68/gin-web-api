@@ -6,11 +6,15 @@ middleware:
 db:
   mysql:
     user : root
-    pass : root
+    pass : root1
     host : 127.0.0.1
-    port : 3306
+    port : 3301
     dbname : test
     debug : true
   redis:
     host : 127.0.0.1
     port : 6379
+wechat :
+  user :
+    appid :
+    app-secret :
