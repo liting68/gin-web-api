@@ -39,4 +39,6 @@ Linux 环境 go run main.go
 Windows 环境 go run win.go
 ```
 ## 平滑重启
+```text
 kill -1 pid
+```
