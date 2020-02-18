@@ -38,7 +38,8 @@ func CreateJWT(user LoginUser) (string, error) {
 	var jwtSecret = []byte(config.Info.Middleware.Secret)
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	var err error
-	if token, err := tokenClaims.SignedString(jwtSecret); err == nil {
+	token := ""
+	if token, err = tokenClaims.SignedString(jwtSecret); err == nil {
 		return "Bearer " + token, err
 	}
 	return "", err
