@@ -15,8 +15,8 @@ const (
 	LayoutShortdate          = "2006-1-2"
 )
 
-//StringToTime 格式化时间
-func StringToTime(timestr string) (t time.Time, err error) {
+//Str2Time 格式化时间
+func Str2Time(timestr string) (t time.Time, err error) {
 	loc, err := time.LoadLocation("Asia/Shanghai")
 	sv := string(timestr)
 	if len(sv) == 0 {

@@ -27,6 +27,7 @@ type token struct {
 func getHeaders() map[string]string {
 	dir, _ := os.Getwd()
 	token, err := ioutil.ReadFile(dir + "/config/token")
+	hs := map[string]string{}
 	if err == nil {
 		hs["Authorization"] = string(token)
 	}

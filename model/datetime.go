@@ -8,19 +8,10 @@ package model
  */
 
 import (
+	"app/utils"
 	"database/sql/driver"
 	"fmt"
 	"time"
-)
-
-//格式化时间
-const (
-	LayoutDatetime           = "2006-01-02 15:04:05"
-	LayoutShortdateTime      = "2006-1-2 15:04:05"
-	LayoutShortdateShortTime = "2006-1-2 15:4:5"
-	LayoutDateMin            = "2006-01-02 15:04"
-	LayoutDate               = "2006-01-02"
-	LayoutShortdate          = "2006-1-2"
 )
 
 //Datetime 格式化时间
@@ -33,7 +24,6 @@ func (d *Datetime) UnmarshalJSON(b []byte) (err error) {
 	if b[0] == '"' && b[len(b)-1] == '"' {
 		b = b[1 : len(b)-1]
 	}
-	loc, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		panic(err)
 	}
@@ -41,20 +31,7 @@ func (d *Datetime) UnmarshalJSON(b []byte) (err error) {
 	if len(sv) == 0 {
 		return fmt.Errorf("%s", "can not format time empty")
 	}
-	if len(sv) <= 10 {
-		d.Time, err = time.ParseInLocation(LayoutDate, string(sv), loc)
-		if err != nil {
-			d.Time, err = time.ParseInLocation(LayoutShortdate, string(sv), loc)
-		}
-	} else {
-		d.Time, err = time.ParseInLocation(LayoutDatetime, string(sv), loc)
-		if err != nil {
-			d.Time, err = time.ParseInLocation(LayoutShortdateTime, string(sv), loc)
-			if err != nil {
-				d.Time, err = time.ParseInLocation(LayoutShortdateShortTime, string(sv), loc)
-			}
-		}
-	}
+	d.Time, err = utils.Str2Time(sv)
 	return err
 }
 
@@ -64,7 +41,7 @@ func (d Datetime) MarshalJSON() ([]byte, error) {
 	if d.Unix() <= 0 {
 		return []byte(`""`), nil
 	}
-	return []byte(fmt.Sprintf(`"%s"`, d.Format(CtLayout))), nil
+	return []byte(fmt.Sprintf(`"%s"`, utils.FormatDatetime(d.Time))), nil
 }
 
 //Value 返回Time
