@@ -15,10 +15,12 @@ import (
 
 //格式化时间
 const (
-	CtLayout       = "2006-01-02 15:04:05"
-	CtLayoutNoeven = "2006-1-2 15:04:05"
-	CtLayoutNosec  = "2006-01-02 15:04"
-	CtLayoutDate   = "2006-01-02"
+	LayoutDatetime           = "2006-01-02 15:04:05"
+	LayoutShortdateTime      = "2006-1-2 15:04:05"
+	LayoutShortdateShortTime = "2006-1-2 15:4:5"
+	LayoutDateMin            = "2006-01-02 15:04"
+	LayoutDate               = "2006-01-02"
+	LayoutShortdate          = "2006-1-2"
 )
 
 //Datetime 格式化时间
@@ -37,18 +39,19 @@ func (d *Datetime) UnmarshalJSON(b []byte) (err error) {
 	}
 	sv := string(b)
 	if len(sv) == 0 {
-		return nil
-	} else if len(sv) == 10 {
-		sv += " 00:00:00"
-	} else if len(sv) == 16 {
-		sv += ":00"
+		return fmt.Errorf("%s", "can not format time empty")
 	}
-	d.Time, err = time.ParseInLocation(CtLayout, string(sv), loc)
-	if err != nil {
-		d.Time, err = time.ParseInLocation(CtLayoutNoeven, string(sv), loc)
+	if len(sv) <= 10 {
+		d.Time, err = time.ParseInLocation(LayoutDate, string(sv), loc)
 		if err != nil {
-			if d.Time, err = time.ParseInLocation(CtLayoutNosec, string(sv), loc); err != nil {
-				d.Time, err = time.ParseInLocation(CtLayoutDate, string(sv), loc)
+			d.Time, err = time.ParseInLocation(LayoutShortdate, string(sv), loc)
+		}
+	} else {
+		d.Time, err = time.ParseInLocation(LayoutDatetime, string(sv), loc)
+		if err != nil {
+			d.Time, err = time.ParseInLocation(LayoutShortdateTime, string(sv), loc)
+			if err != nil {
+				d.Time, err = time.ParseInLocation(LayoutShortdateShortTime, string(sv), loc)
 			}
 		}
 	}
