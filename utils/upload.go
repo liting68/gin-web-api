@@ -83,7 +83,7 @@ func UploadBase64(fileBase64 string, dir string) (bool, string) {
 		if suffix == ".png" {
 			m, _ := png.Decode(bytes.NewBuffer(data))
 			png.Encode(f, m) //写入文件
-		} else if suffix == ".jpg" {
+		} else if suffix == ".jpg" || suffix == ".jpeg" {
 			m, _ := jpeg.Decode(bytes.NewBuffer(data))
 			jpeg.Encode(f, m, &jpeg.Options{Quality: 75}) //写入文件
 		}
