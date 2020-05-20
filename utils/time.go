@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"math"
 	"time"
 )
 
@@ -74,4 +75,23 @@ func FormatDatetime(t time.Time) string {
 //FormatDate 时间格式化字符2006-01-02
 func FormatDate(t time.Time) string {
 	return t.Format(LayoutDate)
+}
+
+//AgeFromDate 计算年龄
+func AgeFromDate(birthday time.Time) (age string) {
+	today := time.Now()
+	ageYear := math.Floor(today.Sub(birthday).Hours() / 24 / 365)
+	ageMonth := 0.0
+	if birthday.YearDay() < time.Now().YearDay() {
+		ageMonth = math.Floor((float64(time.Now().YearDay()) - float64(birthday.YearDay())) / 30)
+	} else {
+		ageMonth = math.Floor((float64(time.Now().YearDay()+365) - float64(birthday.YearDay())) / 30)
+	}
+	if ageMonth != 0 {
+		time.Now().YearDay()
+		age = fmt.Sprintf("%.0f岁%.0f个月", ageYear, ageMonth)
+	} else {
+		age = fmt.Sprintf("%.0f岁", ageYear)
+	}
+	return age
 }
