@@ -43,7 +43,7 @@ func Upload(c *gin.Context, field string, dir string) (bool, string) {
 		if suffix == "" {
 			return false, "文件格式不正确"
 		}
-		fileName := strconv.FormatInt(time.Now().Unix(), 10) + suffix
+		fileName := strconv.FormatInt(time.Now().UnixNano()/1e6, 10) + suffix
 		e = c.SaveUploadedFile(file, path+fileName)
 		if e != nil {
 			return false, "无法保存文件"
@@ -51,6 +51,48 @@ func Upload(c *gin.Context, field string, dir string) (bool, string) {
 		return true, dir + fileName
 	}
 	return false, "文件上传失败"
+}
+
+//UploadFiles 上传多个文件
+func UploadFiles(c *gin.Context, field string, dir string) ([]string, error) {
+	form, e := c.MultipartForm()
+	if e != nil {
+		fmt.Println("文件上传失败：" + e.Error())
+		return []string{""}, e
+	}
+	files := form.File[field]
+	filepathArr := []string{}
+	for k, file := range files {
+		basedir, _ := os.Getwd()
+		path := basedir + dir
+		e = os.MkdirAll(path, os.ModePerm)
+		if e != nil {
+			return []string{"无法创建文件夹"}, e
+		}
+		suffix := ""
+		if strings.Contains(file.Filename, ".") {
+			suffix = file.Filename[strings.LastIndex(file.Filename, "."):]
+		} else {
+			switch file.Header.Get("Content-Type") {
+			case "image/jpeg":
+				suffix = ".jpg"
+			case "image/png":
+				suffix = ".png"
+			default:
+				suffix = ""
+			}
+		}
+		if suffix == "" {
+			return []string{"文件格式不正确"}, e
+		}
+		fileName := strconv.FormatInt(time.Now().Unix(), 10) + "_" + strconv.Itoa(k) + suffix
+		e = c.SaveUploadedFile(file, path+fileName)
+		if e != nil {
+			return []string{"无法保存文件"}, e
+		}
+		filepathArr = append(filepathArr, dir+fileName)
+	}
+	return filepathArr, nil
 }
 
 //UploadBase64 上传Base64文件
