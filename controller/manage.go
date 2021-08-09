@@ -26,3 +26,9 @@ func (m Manage) ManagerPassUpdate(c *gin.Context) {
 	var admin model.Admin
 	admin.UpdatePass(c)
 }
+
+//ModifyPass 修改密码
+func (m Manage) ModifyPass(c *gin.Context) {
+	var admin model.Admin
+	admin.ModifyPass(c)
+}

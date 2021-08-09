@@ -43,7 +43,8 @@ func RegisterRouter(router *gin.Engine) {
 	manage := controller.Manage{}
 	router.POST("/manage/login", manage.Login)
 	router.POST("/manage/account", manage.ManagerAccountAdd)
-	router.POST("/manage/password", ManageAuth(), manage.ManagerPassUpdate)
+	router.POST("/manage/password-update", manage.ManagerPassUpdate)
+	router.POST("/manage/password", ManageAuth(), manage.ModifyPass)
 
 }
 
