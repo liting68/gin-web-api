@@ -7,23 +7,23 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 )
 
-//登录类型
+// 登录类型
 const (
 	LoginAdminType = "Admin"
 	LoginUserType  = "User"
 )
 
-//LoginUser 登录者
+// LoginUser 登录者
 type LoginUser interface {
 	GetID() int
 	GetUsername() string
 	LoginType() string
 }
 
-//CreateJWT 创建JsonWebToken 过期时间10小时
+// CreateJWT 创建JsonWebToken 过期时间10小时
 func CreateJWT(user LoginUser) (string, error) {
 	expiresTime := time.Now().Unix() + int64(10*time.Hour.Seconds()) //10小时
 	claims := jwt.StandardClaims{
@@ -45,7 +45,7 @@ func CreateJWT(user LoginUser) (string, error) {
 	return "", err
 }
 
-//ParseToken 解析token
+// ParseToken 解析token
 func ParseToken(headAuth string) (*jwt.StandardClaims, error) {
 	arr := strings.Fields(headAuth)
 	if len(arr) > 1 {

@@ -13,8 +13,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 // ManageAuth 管理者验证
