@@ -11,7 +11,7 @@ import (
 	"github.com/mattn/go-colorable"
 )
 
-//InitGin 初始化路由
+// InitGin 初始化路由
 func InitGin() *gin.Engine {
 	if config.Info.App.Debug != true {
 		gin.SetMode(gin.ReleaseMode)
@@ -26,13 +26,23 @@ func InitGin() *gin.Engine {
 	//Cors 跨域设置
 	g.Use(Cors())
 
+	//Timeout超时控制
+	// g.Use(timeout.Timeout(
+	// 	timeout.WithTimeout(60*time.Second),
+	// 	timeout.WithErrorHttpCode(http.StatusOK),
+	// 	timeout.WithDefaultMsg(`{"code": 1001, "errMsg":"Request timeout"}`),
+	// 	timeout.WithCallBack(func(r *http.Request) {
+	// 		fmt.Println("timeout happen, url:", r.URL.String())
+	// 	}),
+	// ))
+
 	store := sessions.NewCookieStore([]byte("secret"))
-	g.Use(sessions.Sessions("BONE-HEALTH-session", store))
+	g.Use(sessions.Sessions("MyProject-session", store))
 	RegisterRouter(g)
 	return g
 }
 
-//RegisterRouter 注册路由
+// RegisterRouter 注册路由
 func RegisterRouter(router *gin.Engine) {
 	basedir, _ := os.Getwd()
 	router.Static("/web", basedir+"/web")
@@ -48,7 +58,7 @@ func RegisterRouter(router *gin.Engine) {
 
 }
 
-//Cors 跨域设置
+// Cors 跨域设置
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method

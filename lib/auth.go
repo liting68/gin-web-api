@@ -17,7 +17,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//ManageAuth 管理者验证
+// ManageAuth 管理者验证
 func ManageAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, err := VerifyToken(c, bearer.LoginAdminType)
@@ -30,7 +30,7 @@ func ManageAuth() gin.HandlerFunc {
 	}
 }
 
-//UserAuth 用户端端验证
+// UserAuth 用户端端验证
 func UserAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, err := VerifyToken(c, bearer.LoginUserType)
@@ -43,7 +43,7 @@ func UserAuth() gin.HandlerFunc {
 	}
 }
 
-//VerifyToken 验证token
+// VerifyToken 验证token
 func VerifyToken(context *gin.Context, sub string) (claim *jwt.StandardClaims, err error) {
 	headAuth := context.Request.Header.Get("Authorization")
 	if len(headAuth) == 0 {
