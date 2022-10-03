@@ -2,10 +2,8 @@ package utils
 
 import (
 	"app/config"
-	"app/db"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/url"
 )
 
@@ -28,11 +26,7 @@ func init() {
 
 // AccessToken 获取AccessToken
 func (w *Wechat) AccessToken() string {
-	accessToken, err := db.Redis.Get("weixin_access_token_" + w.AppID).Result()
-	if err != nil {
-		log.Printf("Token get Error %#+v", err)
-	}
-	return accessToken
+	return config.Info.Wechat.User.AccessToken
 }
 
 // SetPatConfig 设置微信公众号

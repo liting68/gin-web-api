@@ -13,7 +13,7 @@ import (
 type Admin struct {
 	ID        int      `gorm:"primary_key;AUTO_INCREMENT;NOT NULL"`
 	Username  string   `gorm:"type:varchar(64);unique_index;NOT NULL" json:"Username"`
-	Password  string   `gorm:"type:varchar(128);NOT NULL" json:"Password" form:"Password"`
+	Password  string   `gorm:"type:varchar(128);NOT NULL" json:"Password"`
 	UpdatedAt Datetime `gorm:"ASSOCIATION_AUTOUPDATE" json:"UpdatedAt"`
 	CreatedAt Datetime `gorm:"ASSOCIATION_AUTOCREATE" json:"CreatedAt"`
 }

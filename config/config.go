@@ -1,14 +1,13 @@
 package config
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 
 	"gopkg.in/yaml.v2"
 )
 
-//Config 配置结构
+// Config 配置结构
 type Config struct {
 	App struct {
 		Host  string `yaml:"host"`
@@ -33,13 +32,14 @@ type Config struct {
 	}
 	Wechat struct {
 		User struct {
-			AppID     string `yaml:"appid"`
-			AppSecret string `yaml:"app-secret"`
+			AccessToken string `yaml:"access-token"`
+			AppID       string `yaml:"appid"`
+			AppSecret   string `yaml:"app-secret"`
 		}
 	}
 }
 
-//Info 全局配置
+// Info 全局配置
 var Info Config
 
 func init() {
@@ -48,7 +48,7 @@ func init() {
 
 func getInfo(conf *Config, file string) {
 	dir, _ := os.Getwd()
-	configFile, err := ioutil.ReadFile(dir + file)
+	configFile, err := os.ReadFile(dir + file)
 	if err != nil {
 		log.Panicln("err:", err.Error())
 	}

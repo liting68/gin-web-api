@@ -16,5 +16,6 @@ db:
     port : 6379
 wechat :
   user :
+    access-token :
     appid :
     app-secret :

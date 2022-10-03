@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RegisterRouter 注册路由
-func RegisterRouter() *gin.Engine {
+// RegisterServer 注册路由服务
+func RegisterServer() *gin.Engine {
 	g := route.InitGin()
 
 	crontab := Crontab{}

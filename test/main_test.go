@@ -30,7 +30,7 @@ func getHeaders() map[string]string {
 }
 
 func runGET(reqURL string, t *testing.T) string {
-	router := controller.RegisterRouter()
+	router := controller.RegisterServer()
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, reqURL, nil)
 	headers := getHeaders()
@@ -45,7 +45,7 @@ func runGET(reqURL string, t *testing.T) string {
 }
 
 func runPOST(reqURL string, t *testing.T, arr map[string]string) string {
-	router := controller.RegisterRouter()
+	router := controller.RegisterServer()
 	value := url.Values{}
 	if len(arr) > 0 {
 		for k, v := range arr {
@@ -67,7 +67,7 @@ func runPOST(reqURL string, t *testing.T, arr map[string]string) string {
 }
 
 func runPostJSON(reqURL string, t *testing.T, jsonStr string) string {
-	router := controller.RegisterRouter()
+	router := controller.RegisterServer()
 	jsonData := []byte(jsonStr)
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodPost, reqURL, bytes.NewBuffer(jsonData))
@@ -84,7 +84,7 @@ func runPostJSON(reqURL string, t *testing.T, jsonStr string) string {
 }
 
 func runDeleteJSON(reqURL string, t *testing.T, jsonStr string) string {
-	router := controller.RegisterRouter()
+	router := controller.RegisterServer()
 	jsonData := []byte(jsonStr)
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodDelete, reqURL, bytes.NewBuffer(jsonData))

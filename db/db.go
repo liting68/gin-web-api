@@ -5,26 +5,19 @@ import (
 	"log"
 	"time"
 
-	"github.com/go-redis/redis/v7"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-//DB 数据库实体
+// DB 数据库实体
 var DB *gorm.DB
-
-//Redis 缓存DB
-var Redis *redis.Client
 
 func init() {
 	DB = getDb(config.Info)
-	Redis = redis.NewClient(&redis.Options{
-		Addr: config.Info.DB.Redis.Host + ":" + config.Info.DB.Redis.Port,
-	})
 }
 
-//CloseDB 关闭连接释放连接池
+// CloseDB 关闭连接释放连接池
 func CloseDB() {
 	DB.Close()
 }
