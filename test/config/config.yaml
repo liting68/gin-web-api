@@ -3,7 +3,7 @@ middleware:
 db:
   mysql:
     user : root
-    pass : root
+    pass : 1q2w3e
     host : 127.0.0.1
     port : 3306
-    dbname : test
+    dbname : myweb

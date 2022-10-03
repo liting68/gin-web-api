@@ -6,10 +6,10 @@ middleware:
 db:
   mysql:
     user : root
-    pass : root1
+    pass : 1q2w3e
     host : 127.0.0.1
-    port : 3301
-    dbname : test
+    port : 3306
+    dbname : myweb
     debug : true
   redis:
     host : 127.0.0.1

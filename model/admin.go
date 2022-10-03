@@ -8,16 +8,15 @@ package model
  */
 
 import (
-	"app/bearer"
 	"app/db"
-	"app/resp"
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
-//Admin 管理员
+// Admin 管理员
 type Admin struct {
 	ID        int      `gorm:"primary_key;AUTO_INCREMENT;NOT NULL"`
 	Username  string   `gorm:"type:varchar(64);unique_index;NOT NULL" json:"Username"`
@@ -26,108 +25,77 @@ type Admin struct {
 	CreatedAt Datetime `gorm:"ASSOCIATION_AUTOCREATE" json:"CreatedAt"`
 }
 
-//TableName 表名admin
+// TableName 表名admin
 func (admin Admin) TableName() string {
 	return "admin"
 }
 
-//自动建表
+// 自动建表
 func init() {
 	table := db.DB.HasTable(Admin{})
 	if !table {
 		db.DB.CreateTable(Admin{})
+		hash, _ := bcrypt.GenerateFromPassword([]byte("admin@1234"), bcrypt.DefaultCost)
+		new := Admin{Username: "admin", Password: string(hash)}
+		db.DB.Save(&new)
 	}
 }
 
-//LoginAdmin 登录者Admin
-func (admin Admin) LoginAdmin(c *gin.Context) Admin {
-	headAuth := c.Request.Header.Get("Authorization")
-	if len(headAuth) != 0 {
-		claim, err := bearer.ParseToken(headAuth)
-		if err == nil {
-			username := claim.Audience
-			db.DB.First(&admin, "username = ?", username)
-			if admin.ID == 0 {
-				admin.Username = username
-			}
-		}
-	}
-	return admin
-}
-
-// //SetSession 设置登录者ID
-// func (admin Admin) SetSession(c *gin.Context, id int) {
-// 	sess := sessions.Default(c)
-// 	db.DB.First(&admin, id)
-// 	if admin.ID != 0 {
-// 		sess.Set("LoginAdminID", admin.ID)
-// 	} else {
-// 		sess.Set("LoginAdminID", 0)
-// 	}
-// 	sess.Save()
-// }
-
-//LoginType 登录用户类型
+// LoginType 登录用户类型
 func (admin Admin) LoginType() string {
-	return bearer.LoginAdminType
+	return BEARER.Admin
 }
 
-//GetID 登录用户ID
+// GetID 登录用户ID
 func (admin Admin) GetID() int {
 	return admin.ID
 }
 
-//GetUsername 登录用户账户
+// GetUsername 登录用户账户
 func (admin Admin) GetUsername() string {
 	return admin.Username
 }
 
-//FirstByID 根据ID查找记录
+// FirstByID 根据ID查找记录
 func (admin Admin) FirstByID(id int) Admin {
-	db.DB.First(&admin, id)
+	db.DB.First(&admin, "id=?", id)
 	return admin
 }
 
-//Create 新增Admin
-func (admin Admin) Create(c *gin.Context) {
+// FirstByUsername 根据用户名查找记录
+func (admin Admin) FirstByUsername(username string) Admin {
+	db.DB.First(&admin, "username=?", username)
+	return admin
+}
+
+// Create 新增Admin
+func (admin Admin) Create(c *gin.Context) (any, error) {
 	err := c.Bind(&admin)
 	if err != nil {
-		resp.Fail(c, err.Error())
+		return nil, err
 	}
 	hash, _ := bcrypt.GenerateFromPassword([]byte(admin.Password), bcrypt.DefaultCost)
 	admin.Password = string(hash)
 	b := db.DB.Create(&admin)
-	for _, e := range b.GetErrors() {
-		resp.Fail(c, e.Error())
-		return
+	for _, err = range b.GetErrors() {
+		return nil, err
 	}
-	resp.Succ(c, admin)
+	return admin, nil
 }
 
-//UpdatePass 更新密码
-func (admin Admin) UpdatePass(c *gin.Context) {
-	loginAdmin := admin.LoginAdmin(c)
-	if loginAdmin.ID == 0 {
-		resp.SessFail(c)
-		return
-	}
+// UpdatePass 更新密码
+func (admin Admin) UpdatePass(c *gin.Context, loginAdmin Admin) (any, error) {
 	c.Bind(&admin)
 	hash, _ := bcrypt.GenerateFromPassword([]byte(admin.Password), bcrypt.DefaultCost)
 	b := db.DB.Model(&loginAdmin).Update("password", string(hash))
 	for _, e := range b.GetErrors() {
-		resp.Fail(c, e.Error())
-		return
+		return nil, e
 	}
-	resp.Succ(c, "修改成功")
+	return "修改成功", nil
 }
 
-//ModifyPass 修改密码
-func (admin Admin) ModifyPass(c *gin.Context) {
-	login := admin.LoginAdmin(c)
-	if login.ID == 0 {
-		resp.SessFail(c)
-		return
-	}
+// ModifyPass 修改密码
+func (admin Admin) ModifyPass(c *gin.Context, login Admin) (any, error) {
 	type requestPass struct {
 		OldPass string `json:"OldPass"`
 		NewPass string `json:"NewPass"`
@@ -136,39 +104,34 @@ func (admin Admin) ModifyPass(c *gin.Context) {
 	c.Bind(&req)
 	user := admin.FirstByID(login.ID)
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.OldPass)); err != nil {
-		resp.Fail(c, "旧密码错误")
-		return
+		return nil, fmt.Errorf("旧密码错误")
 	}
 	hash, _ := bcrypt.GenerateFromPassword([]byte(req.NewPass), bcrypt.DefaultCost)
 	user.Password = string(hash)
 	if err := db.DB.Save(&user).Error; err != nil {
-		resp.Fail(c, err.Error())
-		return
+		return nil, err
 	}
-	resp.Succ(c, "密码修改成功")
+	return "密码修改成功", nil
 }
 
-//Login 登录
-func (admin Admin) Login(c *gin.Context) {
+// Login 登录
+func (admin Admin) Login(c *gin.Context) (any, error) {
 	var loginUser Admin
 	if e := c.Bind(&loginUser); e != nil {
-		resp.Fail(c, e.Error())
+		return nil, e
 	}
 	var o Admin
 	db.DB.First(&o, "username = ?", loginUser.Username)
 	if o.ID == 0 {
-		resp.LoginFail(c, "未找到此用户")
-		return
+		return nil, fmt.Errorf("未找到此用户")
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(o.Password), []byte(loginUser.Password)); err != nil {
-		resp.LoginFail(c, "密码错误")
-		return
+		return nil, fmt.Errorf("密码错误")
 	}
-	if token, err := bearer.CreateJWT(&o); err != nil {
-		resp.AuthFail(c, "授权失败"+token)
+	if token, err := BEARER.CreateJWT(&o); err != nil {
+		return nil, fmt.Errorf("授权失败" + token)
 	} else {
 		log.Printf("%+v \n", o)
-		// admin.SetSession(c, o.ID)
-		resp.Succ(c, token)
+		return token, nil
 	}
 }

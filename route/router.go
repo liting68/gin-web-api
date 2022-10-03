@@ -1,10 +1,8 @@
-package lib
+package route
 
 import (
 	"app/config"
-	"app/controller"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -13,11 +11,12 @@ import (
 
 // InitGin 初始化路由
 func InitGin() *gin.Engine {
-	if config.Info.App.Debug != true {
+	if !config.Info.App.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	gin.DefaultWriter = colorable.NewColorableStdout()
 	g := gin.New()
+	g.SetTrustedProxies(nil)
 	// Logger 中间件将写日志到 gin.DefaultWriter ,即使你设置 GIN_MODE=release 。
 	// 默认 gin.DefaultWriter = os.Stdout
 	g.Use(gin.Logger())
@@ -38,24 +37,7 @@ func InitGin() *gin.Engine {
 
 	store := sessions.NewCookieStore([]byte("secret"))
 	g.Use(sessions.Sessions("MyProject-session", store))
-	RegisterRouter(g)
 	return g
-}
-
-// RegisterRouter 注册路由
-func RegisterRouter(router *gin.Engine) {
-	basedir, _ := os.Getwd()
-	router.Static("/web", basedir+"/web")
-
-	home := controller.Home{}
-	router.POST("/login", home.Login)
-
-	manage := controller.Manage{}
-	router.POST("/manage/login", manage.Login)
-	router.POST("/manage/account", manage.ManagerAccountAdd)
-	router.POST("/manage/password-update", manage.ManagerPassUpdate)
-	router.POST("/manage/password", ManageAuth(), manage.ModifyPass)
-
 }
 
 // Cors 跨域设置

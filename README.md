@@ -1,5 +1,5 @@
 # gin-web-api
-golang gin web api framework 基于Gin开发的api框架，开箱即用
+Golang Web API framework 基于Golang 开发的Web API框架
 
 ## 配置文件
 ```text
@@ -9,20 +9,21 @@ golang gin web api framework 基于Gin开发的api框架，开箱即用
 ```text
 \config
     └ config.go 配置结构
-    └ config.yaml 配置信息
+    └ config.yaml 配置文件
 \controller
     └ home.go 首页控制器
     └ manage.go 管理员控制器
 \db
     └ db.go 数据库实例
 \lib
-    └ auth.go 授权验证
-    └ cron.go 定时任务
-    └ router.go 路由注册及应用初始化
+    └ auth.go 鉴权
+    └ router.go 路由注册
 \model
     └ admin.go 管理员
-    └ datetime.go 时间格式化
     └ user.go 用户
+    └ bearer.go 框架角色配置
+    └ datetime.go 时间格式化
+    └ cron.go 定时任务
 \resp
     └ response.go 响应
 \test
@@ -42,3 +43,5 @@ Windows 环境 go run win.go
 ```text
 kill -1 pid
 ```
+
+
