@@ -43,8 +43,7 @@ main.go 应用入口
 ```
 ## 使用方法
 ```text
-Linux 环境 go run main.go
-Windows 环境 go run win.go
+go run main.go
 ```
 
 
