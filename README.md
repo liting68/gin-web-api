@@ -39,7 +39,7 @@ Golang Web API framework 基于Golang 开发的Web API框架
     └ wechat.go 微信sdk
 \test
     └ main_test.go 单元测试模块
-main.go 应用入口
+main.go 系统入口
 ```
 ## 使用方法
 ```text

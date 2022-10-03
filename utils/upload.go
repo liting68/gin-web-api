@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"image/jpeg"
 	"image/png"
-	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -124,7 +123,7 @@ func UploadFilesBase64(strarr []string, dir string) ([]string, error) {
 			} else {
 				log.Printf("文件内容：%s", fileBase64)
 			}
-			if strings.Index(fileBase64, ";base64") == -1 {
+			if !strings.Contains(fileBase64, ";base64") {
 				return filepathArr, fmt.Errorf("文件内容需要BASE64格式编码：" + fileBase64)
 			}
 			if len(fileBase64) < 30 {
@@ -145,28 +144,14 @@ func UploadFilesBase64(strarr []string, dir string) ([]string, error) {
 			}
 			data, _ := base64.StdEncoding.DecodeString(fileBase64[strings.LastIndex(fileBase64, "base64,")+7:])
 			fileName := strconv.FormatInt(time.Now().Unix(), 10) + "_" + strconv.Itoa(k) + suffix
-			// e = ioutil.WriteFile(path+fileName, data, 0666)
+			// e = os.WriteFile(path+fileName, data, 0666)
 			f, e := os.OpenFile(path+fileName, os.O_WRONLY|os.O_CREATE, 0666) //创建文件
 			if e != nil {
 				log.Println(e)
 				return filepathArr, e
 			}
 			defer f.Close()
-			e = ioutil.WriteFile(path+fileName, data, 0666)
-			// if suffix == ".png" {
-			// 	m, _ := png.Decode(bytes.NewBuffer(data))
-			// 	e = png.Encode(f, m) //写入文件
-			// 	if e != nil {
-			// 		log.Println(e)
-			// 		return filepathArr, e
-			// 	}
-			// } else if suffix == ".jpg" || suffix == ".jpeg" {
-			// 	m, _ := jpeg.Decode(bytes.NewBuffer(data))
-			// 	e = jpeg.Encode(f, m, &jpeg.Options{Quality: 75}) //写入文件
-			// 	e = jpeg.Encode(f, m, &jpeg.Options{Quality: 75}) //写入文件
-			// } else {
-			// 	e = ioutil.WriteFile(path+fileName, data, 0666)
-			// }
+			e = os.WriteFile(path+fileName, data, 0666)
 			if e != nil {
 				return filepathArr, e
 			}
@@ -197,7 +182,7 @@ func UploadBase64(fileBase64 string, dir string) (bool, string) {
 		} else {
 			log.Printf("文件内容：%s", fileBase64)
 		}
-		if strings.Index(fileBase64, ";base64") == -1 {
+		if !strings.Contains(fileBase64, ";base64") {
 			return false, "文件内容需要BASE64格式编码：" + fileBase64
 		}
 		if len(fileBase64) < 30 {
@@ -218,7 +203,6 @@ func UploadBase64(fileBase64 string, dir string) (bool, string) {
 		}
 		data, _ := base64.StdEncoding.DecodeString(fileBase64[strings.LastIndex(fileBase64, "base64,")+7:])
 		fileName := strconv.FormatInt(time.Now().UnixNano()/1e6, 10) + suffix
-		// e = ioutil.WriteFile(path+fileName, data, 0666)
 		f, e := os.OpenFile(path+fileName, os.O_WRONLY|os.O_CREATE, 0666) //创建文件
 		if e != nil {
 			return false, e.Error()
@@ -234,7 +218,7 @@ func UploadBase64(fileBase64 string, dir string) (bool, string) {
 			m, _ := jpeg.Decode(bytes.NewBuffer(data))
 			e = jpeg.Encode(f, m, &jpeg.Options{Quality: 75}) //写入文件
 		} else {
-			e = ioutil.WriteFile(path+fileName, data, 0666)
+			e = os.WriteFile(path+fileName, data, 0666)
 		}
 		if e != nil {
 			return false, e.Error()
@@ -319,13 +303,13 @@ func UploadBase64Fname(fileBase64 string, dir string, fname string) string {
 		}
 		fname += suffix
 		data, _ := base64.StdEncoding.DecodeString(fileBase64[strings.LastIndex(fileBase64, "base64,")+7:])
-		// e = ioutil.WriteFile(path+fileName, data, 0666)
+		// e = os.WriteFile(path+fileName, data, 0666)
 		f, e := os.OpenFile(path+fname, os.O_WRONLY|os.O_CREATE, 0666) //创建文件
 		if e != nil {
 			return ""
 		}
 		defer f.Close()
-		e = ioutil.WriteFile(path+fname, data, 0666)
+		e = os.WriteFile(path+fname, data, 0666)
 		if e != nil {
 			return ""
 		}

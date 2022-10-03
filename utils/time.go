@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-//格式化时间
+// 格式化时间
 const (
 	LayoutDatetime           = "2006-01-02 15:04:05"
 	LayoutShortdateTime      = "2006-1-2 15:04:05"
@@ -22,9 +22,9 @@ const (
 	SlashShortdate           = "2006/1/2"
 )
 
-//Str2Time 格式化时间
+// Str2Time 格式化时间
 func Str2Time(timestr string) (t time.Time, err error) {
-	loc, err := time.LoadLocation("Asia/Shanghai")
+	loc, _ := time.LoadLocation("Asia/Shanghai")
 	sv := string(timestr)
 	if len(sv) == 0 {
 		return t, fmt.Errorf("%s", "can not format time empty")
@@ -67,17 +67,17 @@ func Str2Time(timestr string) (t time.Time, err error) {
 	return t, err
 }
 
-//FormatDatetime 时间格式化字符2006-01-02 15:04:05
+// FormatDatetime 时间格式化字符2006-01-02 15:04:05
 func FormatDatetime(t time.Time) string {
 	return t.Format(LayoutDatetime)
 }
 
-//FormatDate 时间格式化字符2006-01-02
+// FormatDate 时间格式化字符2006-01-02
 func FormatDate(t time.Time) string {
 	return t.Format(LayoutDate)
 }
 
-//AgeFromDate 计算年龄
+// AgeFromDate 计算年龄
 func AgeFromDate(birthday time.Time) (age string) {
 	today := time.Now()
 	ageYear := math.Floor(today.Sub(birthday).Hours() / 24 / 365)

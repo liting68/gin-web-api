@@ -3,7 +3,7 @@ package utils
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -15,7 +15,7 @@ func CurlGET(url string) (bodystr string) {
 	// 接收服务端返回给客户端的信息
 	res, _ := client.Do(request)
 	if res.StatusCode == 200 {
-		str, _ := ioutil.ReadAll(res.Body)
+		str, _ := io.ReadAll(res.Body)
 		bodystr = string(str)
 		// fmt.Println("CurlGET==", bodystr)
 	}
@@ -33,7 +33,7 @@ func CurlPOST(url string, parm url.Values) (bodystr string) {
 	}
 	defer res.Body.Close()
 	if res.StatusCode == 200 {
-		body, _ := ioutil.ReadAll(res.Body)
+		body, _ := io.ReadAll(res.Body)
 		bodystr = string(body)
 		fmt.Println("CurlPOST==", bodystr)
 	}
@@ -50,7 +50,7 @@ func CurlJSON(url string, data string) (bodystr string) {
 	}
 	defer res.Body.Close()
 	if res.StatusCode == 200 {
-		body, _ := ioutil.ReadAll(res.Body)
+		body, _ := io.ReadAll(res.Body)
 		bodystr = string(body)
 		fmt.Println("CurlJSON==", bodystr)
 	}
