@@ -10,13 +10,13 @@ Golang Web API framework 基于Golang 开发的Web API框架
 \config
     └ config.go 配置结构
     └ config.yaml 配置文件
+\db
+    └ db.go 数据库实例
 \controller
     └ crontab.go 定时任务
     └ manage.go 管理员功能模块
     └ router.go 路由注册模块
     └ user.go 用户功能模块
-\db
-    └ db.go 数据库实例
 \model
     └ admin.go 管理员模块
     └ bearer.go 系统角色模块
@@ -27,8 +27,6 @@ Golang Web API framework 基于Golang 开发的Web API框架
     └ auth.go 鉴权验证
     └ resp.go 响应数据格式及状态码
     └ router.go 路由初始化
-\test
-    └ main_test.go 单元测试模块
 \utils
     └ aesencrypt.go 加密工具
     └ captcha.go 验证码工具
@@ -39,6 +37,8 @@ Golang Web API framework 基于Golang 开发的Web API框架
     └ time.go 日期时间转换工具
     └ upload.go 文件上传工具
     └ wechat.go 微信sdk
+\test
+    └ main_test.go 单元测试模块
 main.go 应用入口
 ```
 ## 使用方法
