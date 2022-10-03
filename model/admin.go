@@ -1,12 +1,5 @@
 package model
 
-/*
- * @Author: hiwein.lucus
- * @Date: 2019-10-12 14:10:54
- * @Last Modified by: hiwein.lucus
- * @Last Modified time: 2019-10-12 18:19:10
- */
-
 import (
 	"app/db"
 	"fmt"

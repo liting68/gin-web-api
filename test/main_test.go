@@ -1,9 +1,3 @@
-/*
- * @Author: hiwein.lucus
- * @Date: 2019-10-08 15:41:54
- * @Last Modified by:   hiwein.lucus
- * @Last Modified time: 2019-10-08 15:41:54
- */
 package test
 
 import (

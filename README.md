@@ -11,26 +11,33 @@ Golang Web API framework 基于Golang 开发的Web API框架
     └ config.go 配置结构
     └ config.yaml 配置文件
 \controller
-    └ home.go 首页控制器
-    └ manage.go 管理员控制器
+    └ crontab.go 定时任务
+    └ manage.go 管理员功能模块
+    └ router.go 路由注册模块
+    └ user.go 用户功能模块
 \db
     └ db.go 数据库实例
-\lib
-    └ auth.go 鉴权
-    └ router.go 路由注册
 \model
-    └ admin.go 管理员
-    └ user.go 用户
-    └ bearer.go 框架角色配置
-    └ datetime.go 时间格式化
-    └ cron.go 定时任务
-\resp
-    └ response.go 响应
+    └ admin.go 管理员模块
+    └ bearer.go 系统角色模块
+    └ crontab.go 定时任务模块
+    └ datetime.go 模型数据日期时间格式化模块
+    └ user.go 用户模块
+\route
+    └ auth.go 鉴权验证
+    └ resp.go 响应数据格式及状态码
+    └ router.go 路由初始化
 \test
-    └ main_test.go 单元测试
+    └ main_test.go 单元测试模块
 \utils
-    └ curl.go curl模拟请求，包含get、post、json
-    └ upload.go 文件上传，base64文件上传
+    └ aesencrypt.go 加密工具
+    └ captcha.go 验证码工具
+    └ curl.go 模拟请求工具
+    └ file.go 文件处理工具
+    └ isgbk.go gbk编码判断工具
+    └ isutf8.go utf8编码判断工具
+    └ time.go 日期时间转换工具
+    └ upload.go 文件上传工具
     └ wechat.go 微信sdk
 main.go 应用入口
 ```
@@ -38,10 +45,6 @@ main.go 应用入口
 ```text
 Linux 环境 go run main.go
 Windows 环境 go run win.go
-```
-## 平滑重启
-```text
-kill -1 pid
 ```
 
 

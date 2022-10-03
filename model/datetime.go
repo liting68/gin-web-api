@@ -1,12 +1,5 @@
 package model
 
-/*
- * @Author: hiwein.lucus
- * @Date: 2019-10-12 15:04:17
- * @Last Modified by: hiwein.lucus
- * @Last Modified time: 2019-10-12 17:25:03
- */
-
 import (
 	"app/utils"
 	"database/sql/driver"
@@ -14,7 +7,7 @@ import (
 	"time"
 )
 
-// Datetime 格式化时间
+// Datetime 格式化日期时间
 type Datetime struct {
 	time.Time
 }

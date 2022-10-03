@@ -1,11 +1,5 @@
 package utils
 
-/*
- * @Author: hiwein.lucus
- * @Date: 2019-10-15 09:27:05
- * @Last Modified by: hiwein.lucus
- * @Last Modified time: 2019-10-15 09:58:38
- */
 import (
 	"bytes"
 	"fmt"
@@ -14,7 +8,7 @@ import (
 	"net/url"
 )
 
-//CurlGET 向服务端发送get请求
+// CurlGET 向服务端发送get请求
 func CurlGET(url string) (bodystr string) {
 	client := &http.Client{}
 	request, _ := http.NewRequest("GET", url, nil)
@@ -29,7 +23,7 @@ func CurlGET(url string) (bodystr string) {
 
 }
 
-//CurlPOST 向服务端发送POST请求
+// CurlPOST 向服务端发送POST请求
 func CurlPOST(url string, parm url.Values) (bodystr string) {
 	client := &http.Client{}
 	parm.Add("info", "")
@@ -46,7 +40,7 @@ func CurlPOST(url string, parm url.Values) (bodystr string) {
 	return bodystr
 }
 
-//CurlJSON 向服务端发送json数据
+// CurlJSON 向服务端发送json数据
 func CurlJSON(url string, data string) (bodystr string) {
 	client := &http.Client{}
 	postdata := bytes.NewBuffer([]byte(data))
