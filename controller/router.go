@@ -20,6 +20,7 @@ func RegisterServer() *gin.Engine {
 
 	user := User{}
 	g.POST("/login", user.Login)
+	g.POST("/ping", user.Ping)
 
 	manage := Manage{}
 	g.POST("/manage/login", manage.Login)

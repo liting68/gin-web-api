@@ -10,7 +10,7 @@ db:
     host : 127.0.0.1
     port : 3306
     dbname : myweb
-    debug : true
+    debug : false
   redis:
     host : 127.0.0.1
     port : 6379

@@ -25,6 +25,11 @@ func (u User) LoginUser(c *gin.Context) model.User {
 	return user
 }
 
+// Ping 连通测试
+func (u User) Ping(c *gin.Context) {
+	route.Succ(c, "pong")
+}
+
 // Login 登录
 func (u User) Login(c *gin.Context) {
 	res, err := model.User{}.Login(c)
