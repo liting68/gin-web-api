@@ -10,13 +10,13 @@ import (
 
 // RegisterServer 注册路由服务
 func RegisterServer() *gin.Engine {
-	g := route.InitGin()
+	g := route.InitRouter()
 
 	crontab := Crontab{}
 	crontab.Start()
 
 	basedir, _ := os.Getwd()
-	g.Static("/web", basedir+"/web")
+	g.Static("/web", basedir+"/web") //静态资源
 
 	user := User{}
 	g.POST("/login", user.Login)

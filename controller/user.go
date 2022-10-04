@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// User 首页控制器
+// User 用户控制器
 type User struct{}
 
 // LoginAdmin 登录者Admin
@@ -29,7 +29,11 @@ func (u User) LoginUser(c *gin.Context) model.User {
 func (u User) Login(c *gin.Context) {
 	res, err := model.User{}.Login(c)
 	if err != nil {
-		route.Fail(c, err.Error())
+		if err.Error() == "密码错误" {
+			route.LoginPassFail(c, err.Error())
+			return
+		}
+		route.LoginFail(c, err.Error())
 		return
 	}
 	route.Succ(c, res)

@@ -9,8 +9,8 @@ import (
 	"github.com/mattn/go-colorable"
 )
 
-// InitGin 初始化路由
-func InitGin() *gin.Engine {
+// InitRouter 初始化路由
+func InitRouter() *gin.Engine {
 	if !config.Info.App.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -36,7 +36,7 @@ func InitGin() *gin.Engine {
 	// ))
 
 	store := sessions.NewCookieStore([]byte("secret"))
-	g.Use(sessions.Sessions("MyProject-session", store))
+	g.Use(sessions.Sessions("MyWeb-session", store))
 	return g
 }
 

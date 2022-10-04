@@ -29,6 +29,8 @@ func init() {
 		hash, _ := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.DefaultCost)
 		new := User{Username: "user", Password: string(hash)}
 		db.DB.Save(&new)
+		disabledUser := User{Username: "user1", Password: string(hash), Status: 2}
+		db.DB.Save(&disabledUser)
 	}
 }
 
@@ -68,6 +70,12 @@ func (u User) FirstByUsername(username string) User {
 func (u User) Login(c *gin.Context) (any, error) {
 	if e := c.Bind(&u); e != nil {
 		return nil, e
+	}
+	if u.Username == "" {
+		return nil, fmt.Errorf("请输入账号")
+	}
+	if u.Password == "" {
+		return nil, fmt.Errorf("请输入密码")
 	}
 	var user User
 	db.DB.First(&user, "username = ? ", u.Username)

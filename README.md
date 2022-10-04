@@ -33,7 +33,7 @@ Golang Web API framework 基于Golang 开发的Web API框架
     └ curl.go 模拟请求工具
     └ file.go 文件处理工具
     └ isgbk.go GBK编码判断工具
-    └ isutf8.go UTF编码判断工具
+    └ isutf8.go UTF8编码判断工具
     └ time.go 日期时间转换工具
     └ upload.go 文件上传工具
     └ wechat.go 微信服务端SDK

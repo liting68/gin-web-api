@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 响应编号
+// 响应状态码
 const (
 	OK              = 0
 	Err             = 1001

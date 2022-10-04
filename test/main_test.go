@@ -4,7 +4,6 @@ import (
 	"app/controller"
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -21,7 +20,7 @@ type token struct {
 
 func getHeaders() map[string]string {
 	dir, _ := os.Getwd()
-	token, err := ioutil.ReadFile(dir + "/config/token")
+	token, err := os.ReadFile(dir + "/config/token")
 	hs := map[string]string{}
 	if err == nil {
 		hs["Authorization"] = string(token)
@@ -66,6 +65,22 @@ func runPOST(reqURL string, t *testing.T, arr map[string]string) string {
 	return w.Body.String()
 }
 
+func runDelete(reqURL string, t *testing.T) string {
+	router := controller.RegisterServer()
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodDelete, reqURL, bytes.NewBuffer([]byte("")))
+	req.Header.Add("Content-Type", "application/json")
+	headers := getHeaders()
+	if len(headers) > 0 {
+		for k, v := range headers {
+			req.Header.Add(k, v)
+		}
+	}
+	router.ServeHTTP(w, req)
+	// assert.Equal(t, http.StatusOK, w.Code)
+	return w.Body.String()
+}
+
 func runPostJSON(reqURL string, t *testing.T, jsonStr string) string {
 	router := controller.RegisterServer()
 	jsonData := []byte(jsonStr)
@@ -83,31 +98,29 @@ func runPostJSON(reqURL string, t *testing.T, jsonStr string) string {
 	return w.Body.String()
 }
 
-func runDeleteJSON(reqURL string, t *testing.T, jsonStr string) string {
-	router := controller.RegisterServer()
-	jsonData := []byte(jsonStr)
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodDelete, reqURL, bytes.NewBuffer(jsonData))
-	req.Header.Add("Content-Type", "application/json")
-	headers := getHeaders()
-	if len(headers) > 0 {
-		for k, v := range headers {
-			req.Header.Add(k, v)
-		}
-	}
-	router.ServeHTTP(w, req)
-	// assert.Equal(t, http.StatusOK, w.Code)
-	return w.Body.String()
+func TestUserLoginErrorNotUsername(t *testing.T) {
+	res := runPostJSON("/login", t, `{"username": "", "password": "test"}`)
+	assert.Equal(t, `{"code":2001,"errMsg":"请输入账号"}`, res)
+}
+
+func TestUserLoginErrorNotPassword(t *testing.T) {
+	res := runPostJSON("/login", t, `{"username": "test", "password": ""}`)
+	assert.Equal(t, `{"code":2001,"errMsg":"请输入密码"}`, res)
 }
 
 func TestUserLoginErrorNotFound(t *testing.T) {
 	res := runPostJSON("/login", t, `{"username": "test", "password": "test"}`)
-	assert.Equal(t, `{"code":1001,"errMsg":"未找到此用户"}`, res)
+	assert.Equal(t, `{"code":2001,"errMsg":"未找到此用户"}`, res)
+}
+
+func TestUserLoginErrorDisabled(t *testing.T) {
+	res := runPostJSON("/login", t, `{"username": "user1", "password": "password"}`)
+	assert.Equal(t, `{"code":2001,"errMsg":"此账号被禁用"}`, res)
 }
 
 func TestUserLoginErrorPass(t *testing.T) {
-	res := runPostJSON("/login", t, `{"username": "user", "password": ""}`)
-	assert.Equal(t, `{"code":1001,"errMsg":"密码错误"}`, res)
+	res := runPostJSON("/login", t, `{"username": "user", "password": "test"}`)
+	assert.Equal(t, `{"code":2002,"errMsg":"密码错误"}`, res)
 }
 
 func TestUserLoginSucc(t *testing.T) {
